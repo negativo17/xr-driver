@@ -29,7 +29,7 @@
 
 Name:           xr-driver
 Version:        2.11.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        User space driver for XR glasses
 # The VITURE, Rokid and TCL/RayNeo SDKs are prebuilt binaries, each under its
 # own proprietary license.
@@ -48,6 +48,8 @@ Source6:        https://github.com/wheaney/xrealOneDeviceKit/archive/%{commit6}.
 Source7:        https://github.com/rohitsangwan01/xreal_one_driver/archive/%{commit7}.tar.gz#/xreal_one_driver-%{shortcommit7}.tar.gz
 Source8:        %{name}-wrapper
 Source9:        99-%{name}.rules
+Source10:       com.xronlinux.XRLinuxDriver.metainfo.xml
+Source11:       com.xronlinux.XRLinuxDriver.png
 Patch0:         %{name}-no-submodule-update.patch
 
 BuildRequires:  cargo
@@ -55,6 +57,7 @@ BuildRequires:  cargo-rpm-macros
 BuildRequires:  chrpath
 BuildRequires:  cmake
 BuildRequires:  gcc
+BuildRequires:  libappstream-glib
 BuildRequires:  libatomic
 BuildRequires:  python3
 BuildRequires:  python3-pyyaml
@@ -149,6 +152,15 @@ echo uinput > %{buildroot}%{_modulesloaddir}/%{name}.conf
 sed -i -e '/^Environment=/d' -e 's|{bin_dir}|%{_bindir}|g' systemd/%{name}.service
 install -p -m 0644 -D systemd/%{name}.service %{buildroot}%{_userunitdir}/%{name}.service
 
+install -p -m 0644 -D %{SOURCE10} %{buildroot}%{_metainfodir}/com.xronlinux.XRLinuxDriver.metainfo.xml
+install -p -m 0644 -D %{SOURCE11} %{buildroot}%{_datadir}/pixmaps/com.xronlinux.XRLinuxDriver.png
+%ifnarch x86_64
+sed -i -e '/usb:v04D2/d' -e '/usb:v1BBB/d' %{buildroot}%{_metainfodir}/com.xronlinux.XRLinuxDriver.metainfo.xml
+%endif
+
+%check
+appstream-util validate --nonet %{buildroot}%{_metainfodir}/com.xronlinux.XRLinuxDriver.metainfo.xml
+
 %post
 %systemd_user_post %{name}.service
 
@@ -164,7 +176,9 @@ install -p -m 0644 -D systemd/%{name}.service %{buildroot}%{_userunitdir}/%{name
 %{_bindir}/xrDriver
 %{_bindir}/xr_driver_cli
 %{_bindir}/xr_driver_logs
+%{_datadir}/pixmaps/com.xronlinux.XRLinuxDriver.png
 %{_libdir}/%{name}
+%{_metainfodir}/com.xronlinux.XRLinuxDriver.metainfo.xml
 %{_modulesloaddir}/%{name}.conf
 %{_udevrulesdir}/70-rayneo-xr.rules
 %{_udevrulesdir}/70-rokid-xr.rules
@@ -175,6 +189,10 @@ install -p -m 0644 -D systemd/%{name}.service %{buildroot}%{_userunitdir}/%{name
 %{_userunitdir}/%{name}.service
 
 %changelog
+* Wed Oct 21 2026 Simone Caronni <negativo17@gmail.com> - 2.11.9-3
+- Add AppStream metadata.
+- Do not start the driver for other Rokid and TCL devices.
+
 * Wed Oct 21 2026 Simone Caronni <negativo17@gmail.com> - 2.11.9-2
 - Start the driver when supported glasses are connected.
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="driver">
+  <id>com.xronlinux.XRLinuxDriver</id>
+  <name>XR Linux Driver</name>
+  <summary>Head tracking driver for VITURE, XREAL, Rokid and TCL/RayNeo XR glasses</summary>
+  <developer id="com.xronlinux">
+    <name>Wayne Heaney</name>
+  </developer>
+  <!-- appstream-builder drops <developer> from the repository catalog -->
+  <developer_name>Wayne Heaney</developer_name>
+  <icon type="local">/usr/share/pixmaps/com.xronlinux.XRLinuxDriver.png</icon>
+  <description>
+    <p>User space driver for XR glasses from VITURE, XREAL, Rokid and TCL/RayNeo. It reads the head tracking data from the glasses and makes it available to the Breezy Desktop GNOME Shell extension and KWin effect, and can also output it as mouse or joystick movements.</p>
+    <p>The VITURE, Rokid and TCL/RayNeo support relies on the proprietary SDKs from the respective vendors.</p>
+  </description>
+  <keywords>
+    <keyword>AR</keyword>
+    <keyword>glasses</keyword>
+    <keyword>head tracking</keyword>
+    <keyword>IMU</keyword>
+    <keyword>RayNeo</keyword>
+    <keyword>Rokid</keyword>
+    <keyword>TCL</keyword>
+    <keyword>VITURE</keyword>
+    <keyword>XR</keyword>
+    <keyword>XREAL</keyword>
+    <keyword>driver</keyword>
+  </keywords>
+  <provides>
+    <modalias>usb:v35CAp*</modalias>
+    <modalias>usb:v3318p*</modalias>
+    <modalias>usb:v04D2p162B*</modalias>
+    <modalias>usb:v04D2p162C*</modalias>
+    <modalias>usb:v04D2p162D*</modalias>
+    <modalias>usb:v04D2p162E*</modalias>
+    <modalias>usb:v04D2p162F*</modalias>
+    <modalias>usb:v04D2p2002*</modalias>
+    <modalias>usb:v04D2p2180*</modalias>
+    <modalias>usb:v1BBBpAF50*</modalias>
+  </provides>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later AND LicenseRef-proprietary</project_license>
+  <url type="homepage">https://github.com/wheaney/XRLinuxDriver</url>
+  <url type="bugtracker">https://github.com/wheaney/XRLinuxDriver/issues</url>
+  <url type="donation">https://ko-fi.com/wheaney</url>
+  <update_contact>negativo17@gmail.com</update_contact>
+</component>

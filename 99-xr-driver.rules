@@ -1,2 +1,5 @@
 # Start the driver in the user session when VITURE, XREAL, Rokid or TCL/RayNeo glasses are connected
-ACTION!="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="35ca|3318|04d2|1bbb", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}+="xr-driver.service"
+ACTION!="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="35ca|3318", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}+="xr-driver.service"
+# Rokid and TCL/RayNeo vendor IDs are shared with other products
+ACTION!="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="04d2", ATTR{idProduct}=="162b|162c|162d|162e|162f|2002|2180", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}+="xr-driver.service"
+ACTION!="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1bbb", ATTR{idProduct}=="af50", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}+="xr-driver.service"
