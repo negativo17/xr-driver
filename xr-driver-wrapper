@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+# Wrapper script for xrDriver.
+
+# The vendor SDKs and their dependencies are in a private folder, so make sure
+# that only the xrDriver binary can access them.
+
+export LD_LIBRARY_PATH="INSTALL_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
+exec INSTALL_DIR/xrDriver "$@"

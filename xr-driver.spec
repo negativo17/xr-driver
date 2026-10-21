@@ -46,14 +46,15 @@ Source4:        https://github.com/xioTechnologies/Fusion/archive/%{commit4}.tar
 Source5:        https://github.com/wheaney/xrealAirDeviceKit/archive/%{commit5}.tar.gz#/xrealAirDeviceKit-%{shortcommit5}.tar.gz
 Source6:        https://github.com/wheaney/xrealOneDeviceKit/archive/%{commit6}.tar.gz#/xrealOneDeviceKit-%{shortcommit6}.tar.gz
 Source7:        https://github.com/rohitsangwan01/xreal_one_driver/archive/%{commit7}.tar.gz#/xreal_one_driver-%{shortcommit7}.tar.gz
+Source8:        %{name}-wrapper
 Patch0:         %{name}-no-submodule-update.patch
 
 BuildRequires:  cargo
 BuildRequires:  cargo-rpm-macros
+BuildRequires:  chrpath
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  libatomic
-BuildRequires:  patchelf
 BuildRequires:  python3
 BuildRequires:  python3-pyyaml
 BuildRequires:  rust
@@ -113,25 +114,30 @@ rm -f lib/x86_64/viture/libusb-1.0.so*
 rm -f lib/x86_64/viture/libopencv_*.so.4.2.0 lib/x86_64/viture/libopencv_videoio.so*
 rm -f lib/aarch64/viture/libopencv_*
 
+# Libraries are found through the wrapper
+%ifarch x86_64
+chrpath -d lib/x86_64/libGlassSDK.so lib/x86_64/viture/libopencv_*.so*
+%endif
+chrpath -d lib/%{_target_cpu}/viture/libglasses.so
+
 %build
 export RUSTFLAGS="%{build_rustflags}"
-%cmake
+%cmake \
+    -DCMAKE_SKIP_BUILD_RPATH=ON
 %cmake_build
 
 %install
-install -p -m 0755 -D %{_vpath_builddir}/xrDriver %{buildroot}%{_bindir}/xrDriver
-patchelf --set-rpath %{_libdir}/%{name} %{buildroot}%{_bindir}/xrDriver
-install -p -m 0755 bin/xr_driver_cli bin/xr_driver_logs %{buildroot}%{_bindir}/
-
-mkdir -p %{buildroot}%{_libdir}/%{name}
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_libdir}/%{name}
+install -p -m 0755 %{_vpath_builddir}/xrDriver %{buildroot}%{_libdir}/%{name}/
 install -p -m 0755 lib/%{_target_cpu}/viture/lib{carina_vio,glasses}.so %{buildroot}%{_libdir}/%{name}/
 %ifarch x86_64
 install -p -m 0755 lib/x86_64/lib{GlassSDK,RayNeoXRMiniSDK}.so lib/x86_64/viture/libopencv_*.so.4.2 \
     %{buildroot}%{_libdir}/%{name}/
 %endif
-for lib in %{buildroot}%{_libdir}/%{name}/*; do
-    patchelf --set-rpath '$ORIGIN' $lib
-done
+
+sed -e 's|INSTALL_DIR|%{_libdir}/%{name}|g' %{SOURCE8} > %{buildroot}%{_bindir}/xrDriver
+chmod 0755 %{buildroot}%{_bindir}/xrDriver
+install -p -m 0755 bin/xr_driver_cli bin/xr_driver_logs %{buildroot}%{_bindir}/
 
 mkdir -p %{buildroot}%{_udevrulesdir}
 install -p -m 0644 udev/*.rules %{buildroot}%{_udevrulesdir}/
