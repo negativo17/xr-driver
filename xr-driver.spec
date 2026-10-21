@@ -24,6 +24,9 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/.*$
 %global __requires_exclude ^lib(carina_vio|glasses|GlassSDK|RayNeoXRMiniSDK|opencv_[a-z0-9]+)\\.so.*$
 
+# Ninja fails as the Cargo built library is not declared as a byproduct
+%undefine _cmake_generator
+
 Name:           xr-driver
 Version:        2.11.9
 Release:        1%{?dist}
