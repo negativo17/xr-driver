@@ -29,7 +29,7 @@
 
 Name:           xr-driver
 Version:        2.11.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        User space driver for XR glasses
 # The VITURE, Rokid and TCL/RayNeo SDKs are prebuilt binaries, each under its
 # own proprietary license.
@@ -47,6 +47,7 @@ Source5:        https://github.com/wheaney/xrealAirDeviceKit/archive/%{commit5}.
 Source6:        https://github.com/wheaney/xrealOneDeviceKit/archive/%{commit6}.tar.gz#/xrealOneDeviceKit-%{shortcommit6}.tar.gz
 Source7:        https://github.com/rohitsangwan01/xreal_one_driver/archive/%{commit7}.tar.gz#/xreal_one_driver-%{shortcommit7}.tar.gz
 Source8:        %{name}-wrapper
+Source9:        99-%{name}.rules
 Patch0:         %{name}-no-submodule-update.patch
 
 BuildRequires:  cargo
@@ -140,7 +141,7 @@ chmod 0755 %{buildroot}%{_bindir}/xrDriver
 install -p -m 0755 bin/xr_driver_cli bin/xr_driver_logs %{buildroot}%{_bindir}/
 
 mkdir -p %{buildroot}%{_udevrulesdir}
-install -p -m 0644 udev/*.rules %{buildroot}%{_udevrulesdir}/
+install -p -m 0644 udev/*.rules %{SOURCE9} %{buildroot}%{_udevrulesdir}/
 
 mkdir -p %{buildroot}%{_modulesloaddir}
 echo uinput > %{buildroot}%{_modulesloaddir}/%{name}.conf
@@ -170,8 +171,12 @@ install -p -m 0644 -D systemd/%{name}.service %{buildroot}%{_userunitdir}/%{name
 %{_udevrulesdir}/70-uinput-xr.rules
 %{_udevrulesdir}/70-viture-xr.rules
 %{_udevrulesdir}/70-xreal-xr.rules
+%{_udevrulesdir}/99-%{name}.rules
 %{_userunitdir}/%{name}.service
 
 %changelog
+* Wed Oct 21 2026 Simone Caronni <negativo17@gmail.com> - 2.11.9-2
+- Start the driver when supported glasses are connected.
+
 * Wed Oct 21 2026 Simone Caronni <negativo17@gmail.com> - 2.11.9-1
 - First build.

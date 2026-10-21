@@ -1,0 +1,2 @@
+# Start the driver in the user session when VITURE, XREAL, Rokid or TCL/RayNeo glasses are connected
+ACTION!="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="35ca|3318|04d2|1bbb", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}+="xr-driver.service"
