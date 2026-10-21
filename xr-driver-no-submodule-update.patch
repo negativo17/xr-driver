@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9e20b40..175826e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,19 +47,6 @@ pkg_check_modules(JSONC REQUIRED json-c)
+ pkg_check_modules(CURL REQUIRED libcurl)
+ pkg_check_modules(LIBWAYLAND_CLIENT REQUIRED wayland-client)
+ 
+-execute_process(COMMAND git submodule update --init
+-                    modules/xrealInterfaceLibrary
+-                    modules/xrDeviceKit
+-                    modules/xrealAirDeviceKit
+-                    modules/xrealOneDeviceKit
+-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+-execute_process(COMMAND git submodule update --init interface_lib/modules/hidapi
+-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/modules/xrealInterfaceLibrary)
+-execute_process(COMMAND git submodule update --init modules/Fusion
+-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/modules/xrDeviceKit)
+-execute_process(COMMAND git submodule update --init modules/xreal_one_driver
+-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/modules/xrealOneDeviceKit)
+-
+ set(XRDEVICEKIT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/modules/xrDeviceKit")
+ set(XREAL_AIR_DRIVER_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/modules/xrealInterfaceLibrary")
+ 
